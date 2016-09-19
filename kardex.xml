@@ -10,7 +10,8 @@
                 <form string="Kardex">
                     <group>
                         <group>
-                            <field name="producto"/>
+                            <field name="plantilla" string="Producto Padre"/>
+                            <field name="producto" string="Talla y Color"/>
                             <field name="ubicacion"/>
                         </group>
                         <group>
