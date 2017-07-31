@@ -1,3 +1,3 @@
 # -*- encoding: utf-8 -*-
 
-import reportes
+import report

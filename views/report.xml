@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="kardex_asistente_kardex" model="ir.ui.view">
+            <field name="name">kardex_asistente_kardex</field>
+            <field name="model">kardex.asistente_kardex</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Seleccione cuenta y rango de fecha">
+                    <group>
+                        <group>
+                            <field name="ubicacion_id"/>
+                            <field name="producto_id"/>
+                        </group>
+                        <group>
+                            <field name="fecha_desde"/>
+                            <field name="fecha_hasta"/>
+                        </group>
+                    </group>
+                    <footer>
+                        <button name="print_report" string="Reporte" type="object" class="oe_highlight"/>
+                        o
+                        <button special="cancel" string="Cancel" class="oe_link"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <act_window id="window_reporte_kardex" name="Kardex" res_model="kardex.asistente_kardex" src_model="product.product" view_mode="form" target="new"/>
+        <menuitem action="window_reporte_kardex" id="menu_asistente_kardex" parent="stock.menu_warehouse_report"/>
+        <report id="action_reporte_kardex" model="kardex.asistente_kardex" string="Kardex" report_type="qweb-pdf" name="kardex.reporte_kardex" file="kardex.reporte_kardex"/>
+
+    </data>
+</openerp>
