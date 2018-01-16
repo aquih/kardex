@@ -11,6 +11,7 @@
     'data' : [
         'views/report.xml',
         'views/reporte_kardex.xml',
+        'security/ir.model.access.csv',
     ],
     'installable': True,
     'certificate': '',
