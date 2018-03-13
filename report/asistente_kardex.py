@@ -16,8 +16,8 @@ class AsistenteKardex(models.TransientModel):
 
     ubicacion_id = fields.Many2one("stock.location", string="Ubicacion", required=True)
     producto_id = fields.Many2one("product.product", string="Producto", required=True, default=_default_producto)
-    fecha_desde = fields.Date(string="Fecha Inicial", required=True, default=lambda self: time.strftime('%Y-%m-01'))
-    fecha_hasta = fields.Date(string="Fecha Final", required=True, default=lambda self: time.strftime('%Y-%m-%d'))
+    fecha_desde = fields.Datetime(string="Fecha Inicial", required=True)
+    fecha_hasta = fields.Datetime(string="Fecha Final", required=True)
 
     def print_report(self):
         active_ids = self.env.context.get('active_ids', [])
