@@ -42,6 +42,7 @@ class ReporteKardex(models.AbstractModel):
         for m in self.env['stock.move'].search([('product_id','=',datos['producto_id'][0]), ('date','>=',datos['fecha_desde']), ('date','<=',datos['fecha_hasta']), ('state','=','done'), '|', ('location_id','=',datos['ubicacion_id'][0]), ('location_dest_id','=',datos['ubicacion_id'][0])], order = 'date'):
             detalle = {
                 'empresa':'-',
+                'unidad_medida': m.product_id.uom_id.name,
                 'fecha': m.date,
                 'entrada': 0,
                 'salida': 0,
