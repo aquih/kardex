@@ -1,4 +1,4 @@
 # -*- encoding: utf-8 -*-
 
-import asistente_kardex
-import reporte_kardex
+from . import asistente_kardex
+from . import reporte_kardex

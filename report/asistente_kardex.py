@@ -19,13 +19,13 @@ class AsistenteKardex(models.TransientModel):
     fecha_desde = fields.Datetime(string="Fecha Inicial", required=True)
     fecha_hasta = fields.Datetime(string="Fecha Final", required=True)
 
+    @api.multi
     def print_report(self):
-        active_ids = self.env.context.get('active_ids', [])
         data = {
-             'ids': active_ids,
-             'model': self.env.context.get('active_model', 'ir.ui.menu'),
+             'ids': [],
+             'model': 'kardex.asistente_kardex',
              'form': self.read()[0]
         }
-        return self.env['report'].get_action([], 'kardex.reporte_kardex', data=data)
+        return self.env.ref('kardex.action_reporte_kardex').report_action(self, data=data)
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
