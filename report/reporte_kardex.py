@@ -88,5 +88,19 @@ class ReporteKardex(models.AbstractModel):
             'docs': docs,
             'lineas': self.lineas,
         }
+    
+    @api.model
+    def _get_report_values(self, docids, data=None):
+        self.model = self.env.context.get('active_model')
+        docs = self.env[self.model].browse(self.env.context.get('active_ids', []))
+
+        return  {
+            'doc_ids': self.ids,
+            'doc_model': self.model,
+            'data': data['form'],
+            'docs': docs,
+            'lineas': self.lineas,
+        }
+
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
