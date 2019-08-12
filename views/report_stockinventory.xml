@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="giganet_report_picking_document" inherit_id="stock.report_inventory">
+            <div class="page" position="replace">
+                <div class="page">
+                    <h2>Inventario de Stock</h2>
+
+                    <table class="table table-sm">
+                    <thead>
+                        <tr>
+                            <th><strong>Inventario</strong></th>
+                            <th><strong>Fecha</strong></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <span t-field="o.name"/>
+                            </td>
+                            <td>
+                                <span t-field="o.date"/>
+                            </td>
+                        </tr>
+                    </tbody>
+                    </table>
+
+                    <t t-set="locations" t-value="o.line_ids.mapped('location_id')"/>
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th><strong>Producto</strong></th>
+                                <th class="text-right"><strong>Cantidad teórica</strong></th>
+                                <th class="text-right"><strong>Cantidad real</strong></th>
+                                <th class="text-right"><strong>Diferencia unidades</strong></th>
+                                <th class="text-right"><strong>Diferencia costo</strong></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="locations" t-as="location">
+                                <tr groups="stock.group_stock_multi_locations">
+                                    <td colspan="2"><strong t-esc="location.display_name"/></td>
+                                    <td groups="stock.group_production_lot"></td>
+                                    <td groups="stock.group_tracking_lot"></td>
+                                    <td></td>
+                                </tr>
+                                <tr t-foreach="o.line_ids.filtered(lambda line: line.location_id.id == location.id)" t-as="line">
+                                    <td><span t-field="line.product_id"/></td>
+                                    <td class="text-right"><span t-field="line.theoretical_qty"/> <span t-field="line.product_uom_id" groups="uom.group_uom"/></td>
+                                    <td class="text-right"><span t-field="line.product_qty"/> <span t-field="line.product_uom_id" groups="uom.group_uom"/></td>
+                                    <td class="text-right"><span t-esc="line.product_qty - line.theoretical_qty"/></td>
+                                    <td class="text-right"><span t-esc="line.product_id.standard_price * (line.product_qty - line.theoretical_qty)" t-options='{"widget": "monetary", "display_currency": user.company_id.currency_id}'/></td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+
+                    <t t-if="o.filter == 'product' and o.product_id">
+                      <div class="row justify-content-end">
+                        <div class="col-4">
+                             <table class="table table-sm">
+                                <tr class="border-black">
+                                    <td><strong>Total Quantity</strong></td>
+                                    <td class="text-right">
+                                        <span t-field="o.total_qty"/> <span t-field="o.product_id.uom_id"/>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                      </div>
+                    </t>
+
+                </div>
+            </div>
+        </template>
+    </data>
+</odoo>
