@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
-        <template id="giganet_report_picking_document" inherit_id="stock.report_inventory">
+        <template id="construfacil_report_picking_document" inherit_id="stock.report_inventory">
             <div class="page" position="replace">
                 <div class="page">
                     <h2>Inventario de Stock</h2>
@@ -30,6 +30,8 @@
                         <thead>
                             <tr>
                                 <th><strong>Producto</strong></th>
+                                <th><strong>Unidad medida</strong></th>
+                                <th><strong>Ubicación</strong></th>
                                 <th class="text-right"><strong>Cantidad teórica</strong></th>
                                 <th class="text-right"><strong>Cantidad real</strong></th>
                                 <th class="text-right"><strong>Diferencia unidades</strong></th>
@@ -37,6 +39,7 @@
                             </tr>
                         </thead>
                         <tbody>
+                            <t t-set="total_diferencia" t-value="0"/>
                             <t t-foreach="locations" t-as="location">
                                 <tr groups="stock.group_stock_multi_locations">
                                     <td colspan="2"><strong t-esc="location.display_name"/></td>
@@ -46,12 +49,24 @@
                                 </tr>
                                 <tr t-foreach="o.line_ids.filtered(lambda line: line.location_id.id == location.id)" t-as="line">
                                     <td><span t-field="line.product_id"/></td>
+                                    <td><span t-field="line.product_uom_id"/></td>
+                                    <td><span t-field="line.location_id"/></td>
                                     <td class="text-right"><span t-field="line.theoretical_qty"/> <span t-field="line.product_uom_id" groups="uom.group_uom"/></td>
                                     <td class="text-right"><span t-field="line.product_qty"/> <span t-field="line.product_uom_id" groups="uom.group_uom"/></td>
                                     <td class="text-right"><span t-esc="line.product_qty - line.theoretical_qty"/></td>
                                     <td class="text-right"><span t-esc="line.product_id.standard_price * (line.product_qty - line.theoretical_qty)" t-options='{"widget": "monetary", "display_currency": user.company_id.currency_id}'/></td>
+                                    <t t-set="total_diferencia" t-value="total_diferencia + line.product_id.standard_price * (line.product_qty - line.theoretical_qty)"/>
                                 </tr>
                             </t>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td class="text-right"><strong>Total</strong></td>
+                                <td class="text-right"><span t-esc="total_diferencia" t-options='{"widget": "monetary", "display_currency": user.company_id.currency_id}'/></td>
+                            </tr>
                         </tbody>
                     </table>
 

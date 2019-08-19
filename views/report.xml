@@ -11,15 +11,20 @@
                     <group>
                         <group>
                             <field name="ubicacion_id"/>
-                            <field name="producto_id"/>
+                            <field name="name_excel" invisible="1"/>
+                            <field name="archivo_excel" readonly="1" filename="name_excel"/>
                         </group>
                         <group>
                             <field name="fecha_desde"/>
                             <field name="fecha_hasta"/>
                         </group>
                     </group>
+                    <group>
+                        <field name="producto_ids"/>
+                    </group>
                     <footer>
-                        <button name="print_report" string="Reporte" type="object" class="oe_highlight"/>
+                        <button name="print_report" string="Reporte PDF" type="object" class="oe_highlight"/>
+                        <button name="reporte_excel" string="Reporte Excel" type="object" class="oe_highlight"/>
                         o
                         <button special="cancel" string="Cancel" class="oe_link"/>
                     </footer>

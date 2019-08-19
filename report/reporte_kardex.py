@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 
 from odoo import api, models
+import logging
 
 class ReporteKardex(models.AbstractModel):
     _name = 'report.kardex.reporte_kardex'
 
     def inicial(self, datos):
-
         self.env.cr.execute("select sum(qty_in) as entrada, sum(qty_out) as salida, product_id \
             from ( \
                select sum(product_qty) as qty_in, 0 as qty_out, product_id \
@@ -20,7 +20,7 @@ class ReporteKardex(models.AbstractModel):
                group by product_id \
             ) movimientos\
             group by product_id",
-            (datos['producto_id'][0], datos['ubicacion_id'][0], datos['fecha_desde'], datos['producto_id'][0], datos['ubicacion_id'][0], datos['fecha_desde']))
+            (datos['producto_id'], datos['ubicacion_id'], datos['fecha_desde'], datos['producto_id'], datos['ubicacion_id'], datos['fecha_desde']))
         lineas = self.env.cr.dictfetchall()
 
         total = 0
@@ -29,17 +29,23 @@ class ReporteKardex(models.AbstractModel):
 
         return total
 
-    def lineas(self, datos):
+    def lineas(self, datos, product_id):
         totales = {}
         totales['entrada'] = 0
         totales['salida'] = 0
         totales['inicio'] = 0
 
-        totales['inicio'] = self.inicial(datos)
+        producto = self.env['product.product'].browse([product_id])
+        dict = {'producto_id': producto.id, 
+                'ubicacion_id': datos['ubicacion_id'][0], 
+                'fecha_desde': datos['fecha_desde']
+               }
+
+        totales['inicio'] = self.inicial(dict)
 
         saldo = totales['inicio']
         lineas = []
-        for m in self.env['stock.move'].search([('product_id','=',datos['producto_id'][0]), ('date','>=',datos['fecha_desde']), ('date','<=',datos['fecha_hasta']), ('state','=','done'), '|', ('location_id','=',datos['ubicacion_id'][0]), ('location_dest_id','=',datos['ubicacion_id'][0])], order = 'date'):
+        for m in self.env['stock.move'].search([('product_id','=',producto.id), ('date','>=',datos['fecha_desde']), ('date','<=',datos['fecha_hasta']), ('state','=','done'), '|', ('location_id','=',datos['ubicacion_id'][0]), ('location_dest_id','=',datos['ubicacion_id'][0])], order = 'date'):
             detalle = {
                 'empresa':'-',
                 'unidad_medida': m.product_id.uom_id.name,
@@ -74,7 +80,7 @@ class ReporteKardex(models.AbstractModel):
 
             lineas.append(detalle)
 
-        return {'lineas': lineas, 'totales': totales}
+        return {'producto': producto.name, 'lineas': lineas, 'totales': totales}
 
     @api.model
     def get_report_values(self, docids, data=None):
