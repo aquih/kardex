@@ -96,7 +96,7 @@ class AsistenteKardex(models.TransientModel):
                 hoja.write(y, 6, linea['salida'])
                 hoja.write(y, 7, linea['saldo'])
                 hoja.write(y, 8, linea['costo'])
-                hoja.write(y, 9, linea['saldo'] + linea['costo'])
+                hoja.write(y, 9, linea['saldo'] * linea['costo'])
                 y += 1
             y += 1
 
