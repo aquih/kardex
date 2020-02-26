@@ -4,7 +4,7 @@ from openerp import models, fields, api, _
 from openerp.exceptions import UserError, ValidationError
 import time
 import datetime
-import xlwt
+import xlsxwriter
 import base64
 import io
 import logging
@@ -37,12 +37,10 @@ class AsistenteKardex(models.TransientModel):
 
     @api.multi
     def reporte_excel(self):
-        libro = xlwt.Workbook()
-        hoja = libro.add_sheet('reporte')
+        f = io.BytesIO()
+        libro = xlsxwriter.Workbook(f)
+        hoja = libro.add_worksheet('reporte')
 
-        xlwt.add_palette_colour("custom_colour", 0x21)
-        libro.set_colour_RGB(0x21, 200, 200, 200)
-        estilo = xlwt.easyxf('pattern: pattern solid, fore_colour custom_colour')
         hoja.write(0, 0, 'KARDEX')
 
         datos = {}
@@ -53,7 +51,6 @@ class AsistenteKardex(models.TransientModel):
         
         y = 2
         for producto in self.producto_ids:
-#            datos['producto_id'] = producto.id
             resultado = self.env['report.kardex.reporte_kardex'].lineas(datos, producto.id)
             hoja.write(y, 0, 'Fecha desde:')
             hoja.write(y, 1, 'Fecha hasta:')
@@ -100,8 +97,7 @@ class AsistenteKardex(models.TransientModel):
                 y += 1
             y += 1
 
-        f = io.BytesIO()
-        libro.save(f)
+        libro.close()
         datos = base64.b64encode(f.getvalue())
         self.write({'archivo_excel':datos, 'name_excel':'kardex.xls'})
 
