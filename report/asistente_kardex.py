@@ -24,7 +24,7 @@ class AsistenteKardex(models.TransientModel):
     fecha_desde = fields.Datetime(string="Fecha Inicial", required=True)
     fecha_hasta = fields.Datetime(string="Fecha Final", required=True)
     archivo_excel = fields.Binary('Archivo excel')
-    name_excel = fields.Char('Nombre archivo', default='kardex.xls', size=32)
+    name_excel = fields.Char('Nombre archivo', default='kardex.xlsx', size=32)
 
     @api.multi
     def print_report(self):
