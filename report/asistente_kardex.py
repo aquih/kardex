@@ -57,8 +57,8 @@ class AsistenteKardex(models.TransientModel):
             hoja.write(y, 2, 'Ubicación:')
             hoja.write(y, 3, 'Producto:')
             y += 1
-            hoja.write(y, 0, self.fecha_desde.strftime('%d/%m/%Y %H:%M:%S'))
-            hoja.write(y, 1, self.fecha_hasta.strftime('%d/%m/%Y %H:%M:%S'))
+            hoja.write(y, 0, fields.Date.from_string(self.fecha_desde).strftime('%d/%m/%Y %H:%M:%S'))
+            hoja.write(y, 1, fields.Date.from_string(self.fecha_hasta).strftime('%d/%m/%Y %H:%M:%S'))
             hoja.write(y, 2, self.ubicacion_id.display_name)
             hoja.write(y, 3, producto.name)
             y += 1
