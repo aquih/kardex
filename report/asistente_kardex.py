@@ -44,7 +44,7 @@ class AsistenteKardex(models.TransientModel):
         hoja.write(0, 0, 'KARDEX')
 
         datos = {}
-        F['fecha_desde'] = self.fecha_desde
+        datos['fecha_desde'] = self.fecha_desde
         datos['fecha_hasta'] = self.fecha_hasta
         datos['ubicacion_id'] = []
         datos['ubicacion_id'].append(self.ubicacion_id.id)
