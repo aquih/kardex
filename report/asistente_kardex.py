@@ -84,7 +84,7 @@ class AsistenteKardex(models.TransientModel):
             hoja.write(y, 9, 'Total')
             y += 1
             for linea in resultado['lineas']:
-                hoja.write(y, 0, datetime.datetime.strftime(linea['fecha'],'%d/%m/%Y'))
+                hoja.write(y, 0, fields.Date.from_string(linea['fecha']).strftime('%d/%m/%Y %H:%M:%S'))
                 hoja.write(y, 1, linea['documento'])
                 hoja.write(y, 2, linea['empresa'])
                 hoja.write(y, 3, linea['tipo'])
