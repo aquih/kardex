@@ -13,14 +13,17 @@ class AsistenteKardex(models.TransientModel):
     _name = 'kardex.asistente_kardex'
     _description = 'Kardex'
 
-    def _default_producto(self):
-        if len(self.env.context.get('active_ids', [])) > 0:
-            return self.env.context.get('active_ids')[0]
+    def _default_productos(self):
+        active_ids = self._context.get('active_ids', [])
+        if len(active_ids) > 0:
+            products = self.env['product.product'].browse(active_ids)
+            logging.warn([(4, x, False) for x in active_ids])
+            return [(4, x, False) for x in active_ids]
         else:
             return None
 
     ubicacion_id = fields.Many2one("stock.location", string="Ubicacion", required=True)
-    producto_ids = fields.Many2many("product.product", string="Productos", required=True)
+    producto_ids = fields.Many2many("product.product", string="Productos", default=_default_productos)
     fecha_desde = fields.Datetime(string="Fecha Inicial", required=True)
     fecha_hasta = fields.Datetime(string="Fecha Final", required=True)
     archivo_excel = fields.Binary('Archivo excel')
@@ -99,7 +102,7 @@ class AsistenteKardex(models.TransientModel):
 
         libro.close()
         datos = base64.b64encode(f.getvalue())
-        self.write({'archivo_excel':datos, 'name_excel':'kardex.xls'})
+        self.write({'archivo_excel':datos, 'name_excel':'kardex.xlsx'})
 
         return {
             'view_type': 'form',

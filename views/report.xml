@@ -20,7 +20,7 @@
                         </group>
                     </group>
                     <group>
-                        <field name="producto_ids"/>
+                        <field name="producto_ids" options="{'no_create': True}"/>
                     </group>
                     <footer>
                         <button name="print_report" string="Reporte PDF" type="object" class="oe_highlight"/>
@@ -32,7 +32,7 @@
             </field>
         </record>
 
-        <act_window id="window_reporte_kardex" name="Kardex" res_model="kardex.asistente_kardex" src_model="product.product" view_mode="form" target="new"/>
+        <act_window id="window_reporte_kardex" name="Kardex" res_model="kardex.asistente_kardex" src_model="product.product" view_mode="form" target="new" multi="True"/>
         <menuitem action="window_reporte_kardex" id="menu_asistente_kardex" parent="stock.menu_warehouse_report"/>
         <report id="action_reporte_kardex" model="kardex.asistente_kardex" string="Kardex" report_type="qweb-pdf" name="kardex.reporte_kardex" file="kardex.reporte_kardex"/>
 

@@ -30,6 +30,7 @@ class ReporteKardex(models.AbstractModel):
         return total
 
     def lineas(self, datos, product_id):
+        logging.warn(product_id)
         totales = {}
         totales['entrada'] = 0
         totales['salida'] = 0
@@ -83,22 +84,13 @@ class ReporteKardex(models.AbstractModel):
         return {'producto': producto.name, 'lineas': lineas, 'totales': totales}
 
     @api.model
-    def get_report_values(self, docids, data=None):
-        self.model = self.env.context.get('active_model')
-        docs = self.env[self.model].browse(self.env.context.get('active_ids', []))
-
-        return  {
-            'doc_ids': self.ids,
-            'doc_model': self.model,
-            'data': data['form'],
-            'docs': docs,
-            'lineas': self.lineas,
-        }
+    def _get_report_values(self, docids, data=None):
+        return self.get_report_values(docids, data)
     
     @api.model
     def _get_report_values(self, docids, data=None):
-        self.model = self.env.context.get('active_model')
-        docs = self.env[self.model].browse(self.env.context.get('active_ids', []))
+        self.model = self.env['account.journal']
+        docs = self.model.browse(self.env.context.get('active_ids', []))
 
         return  {
             'doc_ids': self.ids,
