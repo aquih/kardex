@@ -32,7 +32,7 @@
         </record>
 
         
-        <act_window id="window_reporte_kardex" name="kardex" res_model="kardex.asistente_kardex" binding_model="product.product" view_mode="form" target="new"/>
+        <act_window id="window_reporte_kardex" name="Kardex" res_model="kardex.asistente_kardex" binding_model="product.product" view_mode="form" target="new"/>
         <menuitem action="window_reporte_kardex" id="menu_asistente_kardex" parent="stock.menu_warehouse_report"/>
         <report id="action_reporte_kardex" model="kardex.asistente_kardex" string="Kardex" report_type="qweb-pdf" name="kardex.reporte_kardex" file="kardex.reporte_kardex"/>
 
