@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from odoo import api, models
+import datetime
 import logging
 
 class ReporteKardex(models.AbstractModel):
@@ -30,7 +31,6 @@ class ReporteKardex(models.AbstractModel):
         return total
 
     def lineas(self, datos, product_id):
-        logging.warn(product_id)
         totales = {}
         totales['entrada'] = 0
         totales['salida'] = 0
@@ -73,19 +73,20 @@ class ReporteKardex(models.AbstractModel):
                 detalle['salida'] = -m.product_qty
                 totales['salida'] -= m.product_qty
 
-            saldo += detalle['entrada']+detalle['salida']
+            saldo += detalle['entrada'] + detalle['salida']
             detalle['saldo'] = saldo
+            detalle['costo'] = 0
+            detalle['total'] = 0
 
-            costo = m.product_id.get_history_price(m.company_id.id, date=m.date)
-            detalle['costo'] = costo
+            grupos = self.env['stock.valuation.layer'].read_group([('product_id', '=', m.product_id.id), ('create_date', '<=', m.date+datetime.timedelta(seconds=2))], ['value:sum', 'quantity:sum'], ['product_id'])
+            for grupo in grupos:
+                if (grupo['quantity'] != 0):
+                    detalle['costo'] = self.env.company.currency_id.round(grupo['value']/grupo['quantity'])
+                    detalle['total'] = self.env.company.currency_id.round(grupo['value'])
 
             lineas.append(detalle)
 
         return {'producto': producto.name, 'lineas': lineas, 'totales': totales}
-
-    @api.model
-    def _get_report_values(self, docids, data=None):
-        return self.get_report_values(docids, data)
     
     @api.model
     def _get_report_values(self, docids, data=None):
@@ -99,6 +100,3 @@ class ReporteKardex(models.AbstractModel):
             'docs': docs,
             'lineas': self.lineas,
         }
-
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

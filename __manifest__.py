@@ -2,12 +2,12 @@
 
 {
     'name' : 'Kardex',
-    'version' : '1.0',
-    'category': 'Custom',
+    'version' : '1.1',
+    'category': 'Operations/Inventory',
     'description': """Modulo para reporte de kardex""",
-    'author': 'Rodrigo Fernandez',
+    'author': 'aquíH',
     'website': 'http://aquih.com/',
-    'depends' : [ 'stock' ],
+    'depends' : [ 'stock_account' ],
     'data' : [
         'views/report.xml',
         'views/reporte_kardex.xml',
@@ -15,5 +15,4 @@
         'security/ir.model.access.csv',
     ],
     'installable': True,
-    'certificate': '',
 }

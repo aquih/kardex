@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from openerp import models, fields, api, _
-from openerp.exceptions import UserError, ValidationError
-import time
-import datetime
+from odoo import models, fields, api, _
+from odoo.exceptions import UserError, ValidationError
 import xlsxwriter
 import base64
 import io
@@ -17,7 +15,6 @@ class AsistenteKardex(models.TransientModel):
         active_ids = self._context.get('active_ids', [])
         if len(active_ids) > 0:
             products = self.env['product.product'].browse(active_ids)
-            logging.warn([(4, x, False) for x in active_ids])
             return [(4, x, False) for x in active_ids]
         else:
             return None
@@ -29,7 +26,6 @@ class AsistenteKardex(models.TransientModel):
     archivo_excel = fields.Binary('Archivo excel')
     name_excel = fields.Char('Nombre archivo', default='kardex.xlsx', size=32)
 
-    @api.multi
     def print_report(self):
         data = {
              'ids': [],
@@ -38,7 +34,6 @@ class AsistenteKardex(models.TransientModel):
         }
         return self.env.ref('kardex.action_reporte_kardex').report_action(self, data=data)
 
-    @api.multi
     def reporte_excel(self):
         f = io.BytesIO()
         libro = xlsxwriter.Workbook(f)
@@ -60,8 +55,8 @@ class AsistenteKardex(models.TransientModel):
             hoja.write(y, 2, 'Ubicación:')
             hoja.write(y, 3, 'Producto:')
             y += 1
-            hoja.write(y, 0, fields.Datetime.from_string(self.fecha_desde).strftime('%d/%m/%Y %H:%M:%S'))
-            hoja.write(y, 1, fields.Datetime.from_string(self.fecha_hasta).strftime('%d/%m/%Y %H:%M:%S'))
+            hoja.write(y, 0, self.fecha_desde.strftime('%d/%m/%Y %H:%M:%S'))
+            hoja.write(y, 1, self.fecha_hasta.strftime('%d/%m/%Y %H:%M:%S'))
             hoja.write(y, 2, self.ubicacion_id.display_name)
             hoja.write(y, 3, producto.name)
             y += 1
@@ -87,7 +82,7 @@ class AsistenteKardex(models.TransientModel):
             hoja.write(y, 9, 'Total')
             y += 1
             for linea in resultado['lineas']:
-                hoja.write(y, 0, fields.Datetime.from_string(linea['fecha']).strftime('%d/%m/%Y %H:%M:%S'))
+                hoja.write(y, 0, linea['fecha'].strftime('%d/%m/%Y %H:%M:%S'))
                 hoja.write(y, 1, linea['documento'])
                 hoja.write(y, 2, linea['empresa'])
                 hoja.write(y, 3, linea['tipo'])
@@ -96,7 +91,7 @@ class AsistenteKardex(models.TransientModel):
                 hoja.write(y, 6, linea['salida'])
                 hoja.write(y, 7, linea['saldo'])
                 hoja.write(y, 8, linea['costo'])
-                hoja.write(y, 9, linea['saldo'] * linea['costo'])
+                hoja.write(y, 9, linea['total'])
                 y += 1
             y += 1
 
