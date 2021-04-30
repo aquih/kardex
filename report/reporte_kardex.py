@@ -90,12 +90,14 @@ class ReporteKardex(models.AbstractModel):
     
     @api.model
     def _get_report_values(self, docids, data=None):
-        self.model = self.env['account.journal']
-        docs = self.model.browse(self.env.context.get('active_ids', []))
+    @api.model
+    def _get_report_values(self, docids, data=None):
+        model = self.env.context.get('active_model')
+        docs = self.env[model].browse(self.env.context.get('active_ids', []))
 
         return  {
             'doc_ids': self.ids,
-            'doc_model': self.model,
+            'doc_model': model,
             'data': data['form'],
             'docs': docs,
             'lineas': self.lineas,
