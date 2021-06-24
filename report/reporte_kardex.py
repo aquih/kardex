@@ -10,14 +10,14 @@ class ReporteKardex(models.AbstractModel):
     def inicial(self, datos):
         self.env.cr.execute("select sum(qty_in) as entrada, sum(qty_out) as salida, product_id \
             from ( \
-               select sum(product_qty) as qty_in, 0 as qty_out, product_id \
-               from stock_move \
+               select sum(qty_done) as qty_in, 0 as qty_out, product_id \
+               from stock_move_line \
                where state = 'done' and product_id = %s and location_dest_id = %s and date <= %s \
                group by product_id \
                union \
-               select 0 as qty_in, sum(product_qty) as qty_out, product_id \
-               from stock_move \
-               where state = 'done' and product_id = %s and  location_id = %s and date <= %s \
+               select 0 as qty_in, sum(qty_done) as qty_out, product_id \
+               from stock_move_line \
+               where state = 'done' and product_id = %s and location_id = %s and date <= %s \
                group by product_id \
             ) movimientos\
             group by product_id",
@@ -37,16 +37,17 @@ class ReporteKardex(models.AbstractModel):
         totales['inicio'] = 0
 
         producto = self.env['product.product'].browse([product_id])
-        dict = {'producto_id': producto.id, 
-                'ubicacion_id': datos['ubicacion_id'][0], 
-                'fecha_desde': datos['fecha_desde']
-               }
+        dict = {
+            'producto_id': producto.id, 
+            'ubicacion_id': datos['ubicacion_id'][0], 
+            'fecha_desde': datos['fecha_desde']
+        }
 
         totales['inicio'] = self.inicial(dict)
 
         saldo = totales['inicio']
         lineas = []
-        for m in self.env['stock.move'].search([('product_id','=',producto.id), ('date','>=',datos['fecha_desde']), ('date','<=',datos['fecha_hasta']), ('state','=','done'), '|', ('location_id','=',datos['ubicacion_id'][0]), ('location_dest_id','=',datos['ubicacion_id'][0])], order = 'date'):
+        for m in self.env['stock.move.line'].search([('product_id','=',producto.id), ('date','>=',datos['fecha_desde']), ('date','<=',datos['fecha_hasta']), ('state','=','done'), '|', ('location_id','=',datos['ubicacion_id'][0]), ('location_dest_id','=',datos['ubicacion_id'][0])], order = 'date'):
             detalle = {
                 'empresa':'-',
                 'unidad_medida': m.product_id.uom_id.name,
@@ -62,16 +63,16 @@ class ReporteKardex(models.AbstractModel):
                     detalle['empresa'] = m.picking_id.partner_id.name
 
             else:
-                detalle['documento'] = m.name
+                detalle['documento'] = m.reference
 
             if m.location_dest_id.id == datos['ubicacion_id'][0]:
                 detalle['tipo'] = 'Ingreso'
-                detalle['entrada'] = m.product_qty
-                totales['entrada'] += m.product_qty
+                detalle['entrada'] = m.qty_done
+                totales['entrada'] += m.qty_done
             elif m.location_id.id == datos['ubicacion_id'][0]:
                 detalle['tipo'] = 'Salida'
-                detalle['salida'] = -m.product_qty
-                totales['salida'] -= m.product_qty
+                detalle['salida'] = -m.qty_done
+                totales['salida'] -= m.qty_done
 
             saldo += detalle['entrada'] + detalle['salida']
             detalle['saldo'] = saldo
@@ -100,3 +101,4 @@ class ReporteKardex(models.AbstractModel):
             'docs': docs,
             'lineas': self.lineas,
         }
+
