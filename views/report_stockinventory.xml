@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
+        <!--
         <template id="construfacil_report_picking_document" inherit_id="stock.report_inventory">
             <div class="page" position="replace">
                 <div class="page">
@@ -88,5 +89,6 @@
                 </div>
             </div>
         </template>
+        -->
     </data>
 </odoo>
