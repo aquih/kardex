@@ -54,7 +54,7 @@ class ReporteKardex(models.AbstractModel):
                 'fecha': m.date,
                 'entrada': 0,
                 'salida': 0,
-                'saldo':saldo
+                'saldo': saldo
             }
 
             if m.picking_id:
@@ -83,7 +83,7 @@ class ReporteKardex(models.AbstractModel):
             for grupo in grupos:
                 if (grupo['quantity'] != 0):
                     detalle['costo'] = self.env.company.currency_id.round(grupo['value']/grupo['quantity'])
-                    detalle['total'] = self.env.company.currency_id.round(grupo['value'])
+                    detalle['total'] = self.env.company.currency_id.round(grupo['value']/grupo['quantity']*saldo)
 
             lineas.append(detalle)
 
