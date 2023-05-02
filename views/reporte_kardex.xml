@@ -58,8 +58,10 @@
                                         <th><strong>Entradas</strong></th>
                                         <th><strong>Salidas</strong></th>
                                         <th><strong>Final</strong></th>
+                                        <t t-if="mostrar_costo">
                                         <th><strong>Costo</strong></th>
                                         <th><strong>Total</strong></th>
+                                        </t>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -88,12 +90,14 @@
                                         <td class="text-right">
                                             <span t-esc="l['saldo']" t-options="{'widget': 'float', 'decimal_precision': 'Product Unit of Measure'}"/>
                                         </td>
+                                        <t t-if="mostrar_costo">
                                         <td class="text-right">
                                             <span t-esc="l['costo']" t-options="{'widget': 'float', 'decimal_precision': 'Product Unit of Measure'}"/>
                                         </td>
                                         <td class="text-right">
                                             <span t-esc="l['total']" t-options="{'widget': 'float', 'decimal_precision': 'Product Unit of Measure'}"/>
                                         </td>
+                                        </t>
                                     </tr>
                                 </tbody>
                             </table>

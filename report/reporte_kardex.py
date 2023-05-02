@@ -79,11 +79,12 @@ class ReporteKardex(models.AbstractModel):
             detalle['costo'] = 0
             detalle['total'] = 0
 
-            grupos = self.env['stock.valuation.layer'].read_group([('product_id', '=', m.product_id.id), ('create_date', '<=', m.date+datetime.timedelta(seconds=2))], ['value:sum', 'quantity:sum'], ['product_id'])
-            for grupo in grupos:
-                if (grupo['quantity'] != 0):
-                    detalle['costo'] = self.env.company.currency_id.round(grupo['value']/grupo['quantity'])
-                    detalle['total'] = self.env.company.currency_id.round(grupo['value']/grupo['quantity']*saldo)
+            if self.user_has_groups('sales_team.group_sale_manager,account.group_account_user'):
+                grupos = self.env['stock.valuation.layer'].read_group([('product_id', '=', m.product_id.id), ('create_date', '<=', m.date+datetime.timedelta(seconds=2))], ['value:sum', 'quantity:sum'], ['product_id'])
+                for grupo in grupos:
+                    if (grupo['quantity'] != 0):
+                        detalle['costo'] = self.env.company.currency_id.round(grupo['value']/grupo['quantity'])
+                        detalle['total'] = self.env.company.currency_id.round(grupo['value']/grupo['quantity']*saldo)
 
             lineas.append(detalle)
 
@@ -100,5 +101,6 @@ class ReporteKardex(models.AbstractModel):
             'data': data['form'],
             'docs': docs,
             'lineas': self.lineas,
+            'mostrar_costo': self.user_has_groups('stock.group_stock_manager,sales_team.group_sale_manager,account.group_account_user'),
         }
 
