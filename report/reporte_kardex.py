@@ -10,12 +10,12 @@ class ReporteKardex(models.AbstractModel):
     def inicial(self, datos):
         self.env.cr.execute("select sum(qty_in) as entrada, sum(qty_out) as salida, product_id \
             from ( \
-               select sum(qty_done) as qty_in, 0 as qty_out, product_id \
+               select sum(quantity) as qty_in, 0 as qty_out, product_id \
                from stock_move_line \
                where state = 'done' and product_id = %s and location_dest_id = %s and date <= %s \
                group by product_id \
                union \
-               select 0 as qty_in, sum(qty_done) as qty_out, product_id \
+               select 0 as qty_in, sum(quantity) as qty_out, product_id \
                from stock_move_line \
                where state = 'done' and product_id = %s and location_id = %s and date <= %s \
                group by product_id \
@@ -67,12 +67,12 @@ class ReporteKardex(models.AbstractModel):
 
             if m.location_dest_id.id == datos['ubicacion_id'][0]:
                 detalle['tipo'] = 'Ingreso'
-                detalle['entrada'] = m.qty_done
-                totales['entrada'] += m.qty_done
+                detalle['entrada'] = m.quantity
+                totales['entrada'] += m.quantity
             elif m.location_id.id == datos['ubicacion_id'][0]:
                 detalle['tipo'] = 'Salida'
-                detalle['salida'] = -m.qty_done
-                totales['salida'] -= m.qty_done
+                detalle['salida'] = -m.quantity
+                totales['salida'] -= m.quantity
 
             saldo += detalle['entrada'] + detalle['salida']
             detalle['saldo'] = saldo

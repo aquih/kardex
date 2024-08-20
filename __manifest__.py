@@ -2,7 +2,7 @@
 
 {
     'name' : 'Kardex',
-    'version' : '1.1',
+    'version' : '1.2',
     'category': 'Operations/Inventory',
     'description': """Modulo para reporte de kardex""",
     'author': 'aquíH',
