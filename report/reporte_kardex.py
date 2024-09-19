@@ -88,7 +88,7 @@ class ReporteKardex(models.AbstractModel):
 
             lineas.append(detalle)
 
-        return {'producto': producto.name, 'lineas': lineas, 'totales': totales}
+        return {'producto': producto.display_name, 'lineas': lineas, 'totales': totales}
     
     @api.model
     def _get_report_values(self, docids, data=None):
