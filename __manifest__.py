@@ -2,15 +2,15 @@
 
 {
     'name' : 'Kardex',
-    'version' : '1.2',
+    'version' : '1.3',
     'category': 'Inventory/Inventory',
     'description': """Modulo para reporte de kardex""",
     'author': 'aquíH',
-    'website': 'http://aquih.com/',
+    'website': 'http://www.aquih.com/',
     'depends' : [ 'stock_account' ],
     'data' : [
-        'views/report.xml',
-        'views/reporte_kardex.xml',
+        'views/reporte_kardex_views.xml',
+        'wizard/asistente_kardex_views.xml',
         'security/ir.model.access.csv',
     ],
     'installable': True,
