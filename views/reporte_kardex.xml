@@ -55,6 +55,7 @@
                                         <th><strong>Empresa</strong></th>
                                         <th><strong>Tipo</strong></th>
                                         <th><strong>UOM</strong></th>
+                                        <th><strong>Lotes</strong></th>
                                         <th><strong>Entradas</strong></th>
                                         <th><strong>Salidas</strong></th>
                                         <th><strong>Final</strong></th>
@@ -80,6 +81,9 @@
                                         </td>
                                         <td class="text-right">
                                             <span t-esc="l['unidad_medida']"/>
+                                        </td>
+                                        <td>
+                                            <span t-esc="l['lotes']"/>
                                         </td>
                                         <td class="text-right">
                                             <span t-esc="l['entrada']" t-options="{'widget': 'float', 'decimal_precision': 'Product Unit of Measure'}"/>

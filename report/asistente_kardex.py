@@ -75,11 +75,12 @@ class AsistenteKardex(models.TransientModel):
             hoja.write(y, 2, 'Empresa')
             hoja.write(y, 3, 'Tipo')
             hoja.write(y, 4, 'UOM')
-            hoja.write(y, 5, 'Entradas')
-            hoja.write(y, 6, 'Salidas')
-            hoja.write(y, 7, 'Final')
-            hoja.write(y, 8, 'Costo')
-            hoja.write(y, 9, 'Total')
+            hoja.write(y, 5, 'Lotes')
+            hoja.write(y, 6, 'Entradas')
+            hoja.write(y, 7, 'Salidas')
+            hoja.write(y, 8, 'Final')
+            hoja.write(y, 9, 'Costo')
+            hoja.write(y, 10, 'Total')
             y += 1
             for linea in resultado['lineas']:
                 hoja.write(y, 0, linea['fecha'].strftime('%d/%m/%Y %H:%M:%S'))
@@ -87,11 +88,12 @@ class AsistenteKardex(models.TransientModel):
                 hoja.write(y, 2, linea['empresa'])
                 hoja.write(y, 3, linea['tipo'])
                 hoja.write(y, 4, linea['unidad_medida'])
-                hoja.write(y, 5, linea['entrada'])
-                hoja.write(y, 6, linea['salida'])
-                hoja.write(y, 7, linea['saldo'])
-                hoja.write(y, 8, linea['costo'])
-                hoja.write(y, 9, linea['total'])
+                hoja.write(y, 5, linea['lotes'])
+                hoja.write(y, 6, linea['entrada'])
+                hoja.write(y, 7, linea['salida'])
+                hoja.write(y, 8, linea['saldo'])
+                hoja.write(y, 9, linea['costo'])
+                hoja.write(y, 10, linea['total'])
                 y += 1
             y += 1
 

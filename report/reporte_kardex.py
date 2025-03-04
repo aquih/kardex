@@ -51,6 +51,7 @@ class ReporteKardex(models.AbstractModel):
             detalle = {
                 'empresa':'-',
                 'unidad_medida': m.product_id.uom_id.name,
+                'lotes': ', '.join(m.lot_id.mapped('name')),
                 'fecha': m.date,
                 'entrada': 0,
                 'salida': 0,
