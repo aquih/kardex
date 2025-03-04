@@ -9,7 +9,7 @@
     'website': 'http://www.aquih.com/',
     'depends' : [ 'stock_account' ],
     'data' : [
-        'views/reporte_kardex_views.xml',
+        'report/reporte_kardex_views.xml',
         'wizard/asistente_kardex_views.xml',
         'security/ir.model.access.csv',
     ],
