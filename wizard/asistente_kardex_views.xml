@@ -7,20 +7,18 @@
             <field name="model">kardex.asistente_kardex</field>
             <field name="type">form</field>
             <field name="arch" type="xml">
-                <form string="Seleccione cuenta y rango de fecha">
+                <form string="Seleccione ubicación y producto">
                     <group>
                         <group>
-                            <field name="ubicacion_id"/>
-                            <field name="name_excel" invisible="1"/>
-                            <field name="archivo_excel" readonly="1" filename="name_excel"/>
+                            <field name="ubicacion_ids" options="{'no_create': True}" widget="many2many_tags"/>
+                            <field name="producto_ids" options="{'no_create': True}" widget="many2many_tags"/>
                         </group>
                         <group>
                             <field name="fecha_desde"/>
                             <field name="fecha_hasta"/>
+                            <field name="name_excel" invisible="1"/>
+                            <field name="archivo_excel" readonly="1" filename="name_excel"/>
                         </group>
-                    </group>
-                    <group>
-                        <field name="producto_ids" options="{'no_create': True}"/>
                     </group>
                     <footer>
                         <button name="print_report" string="Reporte PDF" type="object" class="oe_highlight"/>
