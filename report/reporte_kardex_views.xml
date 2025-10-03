@@ -7,6 +7,7 @@
                     <div class="page">
                         <div class="oe_structure"/>
                         <h2>Kardex</h2>
+                        <t t-set="total_final" t-value="0"/>
 
                         <t t-foreach="data['ubicacion_ids']" t-as="ubicacion_id">
                             <t t-foreach="data['producto_ids']" t-as="producto_id">
@@ -47,6 +48,7 @@
                                         <span t-esc="result['totales']['inicio']+result['totales']['entrada']+result['totales']['salida']" t-options="{'widget': 'float', 'decimal_precision': 'Product Unit of Measure'}"/>
                                     </div>
                                 </div>
+                                <t t-set="total_final" t-value="total_final+result['totales']['inicio']+result['totales']['entrada']+result['totales']['salida']"/>
 
                                 <table class="table table-condensed">
                                     <thead>
@@ -108,6 +110,7 @@
                                 </table>
                             </t>
                         </t>
+                        <h3>Total de todas las ubicaciones: <span t-esc="total_final" t-options="{'widget': 'float', 'decimal_precision': 'Product Unit of Measure'}"/></h3>
                         <div class="oe_structure"/>
                     </div>
                 </t>

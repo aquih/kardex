@@ -43,6 +43,7 @@ class AsistenteKardex(models.TransientModel):
 
         hoja.write(0, 0, 'KARDEX')
 
+        total_final = 0
         y = 2
         for ubicacion in self.ubicacion_ids:
             for producto in self.producto_ids:
@@ -78,6 +79,7 @@ class AsistenteKardex(models.TransientModel):
                 hoja.write(y, 8, 'Final')
                 hoja.write(y, 9, 'Costo')
                 hoja.write(y, 10, 'Total')
+                total_final += resultado['totales']['inicio']+resultado['totales']['entrada']+resultado['totales']['salida']
                 y += 1
                 for linea in resultado['lineas']:
                     hoja.write(y, 0, linea['fecha'], formato_fecha)
@@ -93,6 +95,9 @@ class AsistenteKardex(models.TransientModel):
                     hoja.write(y, 10, linea['total'], formato_numero)
                     y += 1
                 y += 1
+
+        hoja.write(y, 0, 'Total de todas las ubicaciones')
+        hoja.write(y, 1, total_final, formato_numero)
 
         libro.close()
         archivo = base64.b64encode(f.getvalue())
