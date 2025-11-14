@@ -56,7 +56,7 @@ class AsistenteKardex(models.TransientModel):
                 hoja.write(y, 0, self.fecha_desde, formato_fecha)
                 hoja.write(y, 1, self.fecha_hasta, formato_fecha)
                 hoja.write(y, 2, ubicacion.display_name)
-                hoja.write(y, 3, producto.name)
+                hoja.write(y, 3, producto.display_name)
                 y += 1
                 hoja.write(y, 0, 'Inicial:')
                 hoja.write(y, 1, 'Entradas:')
