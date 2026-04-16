@@ -5,7 +5,7 @@
     'version' : '1.5',
     'category': 'Inventory/Inventory',
     'description': """Modulo para reporte de kardex""",
-    'author': 'aquíH, gomezgleonardob',
+    'author': 'aquíH',
     'website': 'http://www.aquih.com/',
     'depends' : [ 'stock_account' ],
     'data' : [
