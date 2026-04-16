@@ -147,7 +147,7 @@ class AsistenteKardex(models.TransientModel):
                 ) or '',
                 'qty': move.product_qty,
                 'signo': 1,  # entrada positiva
-                'costo': move.price_unit or 0.0,
+                'costo': move.value/move.product_qty if move.product_qty else 0.0,
             })
 
         for move in salidas:
@@ -162,7 +162,7 @@ class AsistenteKardex(models.TransientModel):
                 ) or '',
                 'qty': move.product_qty,
                 'signo': -1,  # salida negativa
-                'costo': move.price_unit or 0.0,
+                 'costo': move.value/move.product_qty if move.product_qty else 0.0,
             })
 
         # Ordenar por fecha
