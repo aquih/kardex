@@ -32,6 +32,8 @@ class ReporteKardex(models.AbstractModel):
         return total
 
     def costos_a_fecha(self, producto, fecha):
+        # Es necesario usar SQL por qué el ORM no funciona. Al parecer, cuando se usa la condicion de 'date', tal
+        # tal vez por ser una vista, no toma en cuenta el costo que debería.
         self.env.cr.execute("select * from stock_avco_report where product_id = %s and date <= %s order by date desc limit 1",
             (producto.id, fecha))
         lineas = self.env.cr.dictfetchall()
