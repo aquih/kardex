@@ -6,6 +6,7 @@ import logging
 
 class ReporteKardex(models.AbstractModel):
     _name = 'report.kardex.reporte_kardex'
+    _description = 'Kardex'
 
     def inicial(self, fecha_desde, producto_id, ubicacion_id):
         self.env.cr.execute("select sum(qty_in) as entrada, sum(qty_out) as salida, product_id \
@@ -29,6 +30,12 @@ class ReporteKardex(models.AbstractModel):
             total += l['entrada'] - l['salida']
 
         return total
+
+    def costos_a_fecha(self, producto, fecha):
+        self.env.cr.execute("select * from stock_avco_report where product_id = %s and date <= %s order by date desc limit 1",
+            (producto.id, fecha))
+        lineas = self.env.cr.dictfetchall()
+        return lineas
 
     def lineas(self, fecha_desde, fecha_hasta, producto_id, ubicacion_id):
         totales = {}
@@ -77,11 +84,9 @@ class ReporteKardex(models.AbstractModel):
             detalle['total'] = 0
 
             if self.env.user.has_group('sales_team.group_sale_manager') or self.env.user.has_group('account.group_account_user'):
-                valuaciones = self.env['stock.valuation.layer'].read_group([('product_id', '=', m.product_id.id), ('create_date', '<=', m.date+datetime.timedelta(seconds=2))], ['value:sum', 'quantity:sum'], ['product_id'])
-                for valuacion in valuaciones:
-                    if (valuacion['quantity'] != 0):
-                        detalle['costo'] = self.env.company.currency_id.round(valuacion['value']/valuacion['quantity'])
-                        detalle['total'] = self.env.company.currency_id.round(valuacion['value']/valuacion['quantity']*saldo)
+                for costo in self.costos_a_fecha(m.product_id, m.date):
+                    detalle['costo'] = self.env.company.currency_id.round(costo['value'])
+                    detalle['total'] = self.env.company.currency_id.round(costo['value'] * saldo)
 
             lineas.append(detalle)
 

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="reporte_kardex_wizard_view_form" model="ir.ui.view">
+        <field name="name">kardex.reporte_kardex.wizard</field>
+        <field name="model">kardex.reporte_kardex.wizard</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form string="Seleccione ubicación y producto">
+                <group>
+                    <group>
+                        <field name="ubicacion_ids" options="{'no_create': True}" widget="many2many_tags"/>
+                        <field name="producto_ids" options="{'no_create': True}" widget="many2many_tags"/>
+                    </group>
+                    <group>
+                        <field name="fecha_desde"/>
+                        <field name="fecha_hasta"/>
+                        <field name="name_excel" invisible="1"/>
+                        <field name="archivo_excel" readonly="1" filename="name_excel"/>
+                    </group>
+                </group>
+                <footer>
+                    <button name="print_report" string="Reporte PDF" type="object" class="oe_highlight"/>
+                    <button name="reporte_excel" string="Reporte Excel" type="object" class="oe_highlight"/>
+                    <button special="cancel" string="Cancel" class="oe_link"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="reporte_kardex_wizard_action" model="ir.actions.act_window">
+        <field name="name">Kardex</field>
+        <field name="res_model">kardex.reporte_kardex.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="binding_model_id" ref="product.model_product_product"/>
+        <field name="target">new</field>
+    </record>
+
+    <record id="reporte_kardex_wizard_report" model="ir.actions.report">
+        <field name="name">Kardex</field>
+        <field name="model">kardex.reporte_kardex.wizard</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">kardex.reporte_kardex</field>
+        <field name="report_file">kardex.reporte_kardex</field>
+    </record>
+
+    <menuitem action="reporte_kardex_wizard_action" id="menu_asistente_kardex" parent="stock.menu_warehouse_report"/>
+
+</odoo>

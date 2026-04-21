@@ -1,3 +1,3 @@
 # -*- encoding: utf-8 -*-
 
-from . import asistente_kardex
+from . import product_product_reporte_kardex

@@ -82,26 +82,26 @@
                                             <td>
                                                 <span t-esc="l['tipo']"/>
                                             </td>
-                                            <td class="text-right">
+                                            <td class="text-end">
                                                 <span t-esc="l['unidad_medida']"/>
                                             </td>
                                             <td>
                                                 <span t-esc="l['lotes']"/>
                                             </td>
-                                            <td class="text-right">
+                                            <td class="text-end">
                                                 <span t-esc="l['entrada']" t-options="{'widget': 'float', 'decimal_precision': 'Product Unit of Measure'}"/>
                                             </td>
-                                            <td class="text-right">
+                                            <td class="text-end">
                                                 <span t-esc="l['salida']" t-options="{'widget': 'float', 'decimal_precision': 'Product Unit of Measure'}"/>
                                             </td>
-                                            <td class="text-right">
+                                            <td class="text-end">
                                                 <span t-esc="l['saldo']" t-options="{'widget': 'float', 'decimal_precision': 'Product Unit of Measure'}"/>
                                             </td>
                                             <t t-if="mostrar_costo">
-                                            <td class="text-right">
+                                            <td class="text-end">
                                                 <span t-esc="l['costo']" t-options="{'widget': 'float', 'decimal_precision': 'Product Unit of Measure'}"/>
                                             </td>
-                                            <td class="text-right">
+                                            <td class="text-end">
                                                 <span t-esc="l['total']" t-options="{'widget': 'float', 'decimal_precision': 'Product Unit of Measure'}"/>
                                             </td>
                                             </t>

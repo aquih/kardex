@@ -1,8 +1,6 @@
-# -*- encoding: utf-8 -*-
-
 {
     'name' : 'Kardex',
-    'version' : '1.5',
+    'version' : '2.0',
     'category': 'Inventory/Inventory',
     'description': """Modulo para reporte de kardex""",
     'author': 'aquíH',
@@ -10,8 +8,9 @@
     'depends' : [ 'stock_account' ],
     'data' : [
         'report/reporte_kardex_views.xml',
-        'wizard/asistente_kardex_views.xml',
+        'wizard/product_product_reporte_kardex_views.xml',
         'security/ir.model.access.csv',
     ],
+    'license': 'Other OSI approved licence',
     'installable': True,
 }

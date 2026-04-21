@@ -8,7 +8,7 @@ import io
 import logging
 
 class AsistenteKardex(models.TransientModel):
-    _name = 'kardex.asistente_kardex'
+    _name = 'kardex.reporte_kardex.wizard'
     _description = 'Kardex'
 
     def _default_productos(self):
@@ -32,7 +32,7 @@ class AsistenteKardex(models.TransientModel):
              'model': 'kardex.asistente_kardex',
              'form': self.read()[0]
         }
-        return self.env.ref('kardex.action_reporte_kardex').report_action(self, data=data)
+        return self.env.ref('kardex.reporte_kardex_wizard_report').report_action(self, data=data)
 
     def reporte_excel(self):
         f = io.BytesIO()
@@ -41,7 +41,7 @@ class AsistenteKardex(models.TransientModel):
         formato_numero = libro.add_format({'num_format': '#,##0.00'})
         hoja = libro.add_worksheet('reporte')
 
-        hoja.write(0, 0, 'KARDEX')
+        hoja.write(0, 0, 'Kardex')
 
         total_final = 0
         y = 2
@@ -104,9 +104,8 @@ class AsistenteKardex(models.TransientModel):
         self.write({'archivo_excel':archivo, 'name_excel':'kardex.xlsx'})
 
         return {
-            'view_type': 'form',
             'view_mode': 'form',
-            'res_model': 'kardex.asistente_kardex',
+            'res_model': 'kardex.reporte_kardex.wizard',
             'res_id': self.id,
             'view_id': False,
             'type': 'ir.actions.act_window',
